@@ -24,7 +24,6 @@ return {
                 capabilities = capabilities,
                 on_init = function(client)
                     if vim.env.VIRTUAL_ENV then
-                        -- local path = require("mason-core.path")
                         client.config.settings.python.pythonPath =
                         vim.fn.resolve(vim.env.VIRTUAL_ENV .. "/bin/python")
                     else
