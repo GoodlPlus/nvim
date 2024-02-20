@@ -32,7 +32,8 @@ vim.keymap.set('n', '<C-Right>', '"<Cmd>vertical resize +" . v:count1 . "<CR>"',
 --------------------------------------------------------------------------------
 -- modify the key value of <C-i>
 --------------------------------------------------------------------------------
-vim.keymap.set("", "<Esc>^i", "<C-i>", { noremap = true })
+-- vim.keymap.set("", "<Esc>^i", "<C-i>", { noremap = true })
+vim.keymap.set("", "<C-^>", "<C-i>", { noremap = true })
 
 --------------------------------------------------------------------------------
 -- make j,k,h,l better
@@ -63,7 +64,7 @@ vim.keymap.set("", "x", '"_x', { noremap = true })
 vim.keymap.set("", "X", '"_X', { noremap = true })
 
 vim.keymap.set("n", "<Esc>", "<Cmd>nohlsearch<CR>", { noremap = true })
-vim.keymap.set("n", "<Esc><Esc>", "<Cmd>nohlsearch<CR>", { noremap = true })
+-- vim.keymap.set("n", "<Esc><Esc>", "<Cmd>nohlsearch<CR>", { noremap = true })
 
 -- This generic behaviour for rename will be overwritten by treesitter.lua where
 -- supported. Don't use 'cxr' in visual mode as it will block 'c'.

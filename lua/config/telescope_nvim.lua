@@ -3,48 +3,31 @@ return {
     lazy = true,
     event = "VeryLazy",
     dependencies = {
-        "nvim-lua/plenary.nvim",
-        {
-            "nvim-telescope/telescope-fzf-native.nvim",
-            build = "make",
-        },
+        { "nvim-lua/plenary.nvim", lazy = true, event = "VeryLazy" },
+        { "nvim-tree/nvim-web-devicons", lazy = true, event = "VeryLazy" },
+        { "nvim-telescope/telescope-fzf-native.nvim", build = "make", lazy = true, event = "VeryLazy" },
     },
     opts = {
         defaults = {
             initial_mode = "insert",
             mappings = {
                 i = {
-                    -- ["<C-j>"] = "move_selection_next",
-                    -- ["<C-k>"] = "move_selection_previous",
-                    -- ["<C-n>"] = "cycle_history_next",
-                    -- ["<C-p>"] = "cycle_history_prev",
-                    -- ["<C-c>"] = "close",
-                    -- ["<C-u>"] = "preview_scrolling_up",
-                    -- ["<C-d>"] = "preview_scrolling_down",
+                    ["<C-u>"] = false,
                 },
             },
-            layout_strategy = "flex",
+            layout_strategy = "vertical",
             layout_config = {
                 prompt_position = "top",
                 width = 0.618,
                 height = 0.618,
             },
             sorting_strategy = "ascending",
-            prompt_prefix = " ",
-            selection_caret = " ",
+            -- prompt_prefix = " ",
+            -- selection_caret = ">",
         },
         pickers = {
-            -- find_files = {
-            --     winblend = 20,
-            -- },
         },
         extensions = {
-            -- fzf = {
-            --     fuzzy = true,
-            --     override_generic_sorter = true,
-            --     override_file_sorter = true,
-            --     case_mode = "smart_case",
-            -- },
         },
     },
     config = function(_, opts)
