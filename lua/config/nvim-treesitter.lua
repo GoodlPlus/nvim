@@ -16,7 +16,7 @@ return {
         require("nvim-treesitter.query_predicates")
     end,
     opts = {
-        ensure_installed = { "python", "c", "cpp", "lua", "vim", "vimdoc", "query", "json", "bash", "yaml", "markdown", "markdown_inline", "thrift" },
+        ensure_installed = { "python", "c", "cpp", "lua", "vim", "vimdoc", "query", "json", "bash", "yaml", "thrift" },
         sync_install = false,
         auto_install = true,
         highlight = {

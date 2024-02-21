@@ -18,6 +18,7 @@ require("lazy").setup({
     },
     spec = {
         { import = "config" },
+        { import = "config.lsp" },
     },
     lockfile = VIM_CONFIG_PATH .. "/cache/lazy-lock.json",
     dev = {

@@ -26,6 +26,8 @@ return  {
                 autocomplete = false,
             },
             mapping = cmp.mapping.preset.insert({
+                ['<C-u>'] = cmp.mapping.scroll_docs(-5), -- Up
+                ['<C-d>'] = cmp.mapping.scroll_docs(5), -- Down
                 ["<Tab>"] = cmp.mapping(function(fallback)
                     if cmp.visible() then
                         cmp.select_next_item()
@@ -62,15 +64,34 @@ return  {
                 { name = "nvim_lsp" },
                 -- { name = "luasnip" },
             }, {
-                { name = "buffer" },
-                { name = "path" },
-            }),
-            -- mapping = Ice.lsp.keymap.cmp(cmp),
+                    { name = "buffer" },
+                    { name = "path" },
+                }),
+            -- formatting = {
+            --     format = lspkind.cmp_format {
+            --         mode = "symbol_text",
+            --         maxwidth = 50,
+            --     },
+            -- },
             formatting = {
-                format = lspkind.cmp_format {
-                    mode = "symbol_text",
-                    maxwidth = 50,
-                },
+                fields = { "kind", "abbr", "menu" },
+                format = function(entry, vim_item)
+                    local kind = require("lspkind").cmp_format({ mode = "symbol", maxwidth = 50 })(entry, vim_item)
+                    local strings = vim.split(kind.kind, "%s", { trimempty = true })
+                    local menu = {
+                        luasnip = "[SNP]",
+                        nvim_lsp = "[LSP]",
+                        nvim_lua = "[VIM]",
+                        buffer = "[BUF]",
+                        path = "[PTH]",
+                        calc = "[CLC]",
+                        latex_symbols = "[TEX]",
+                        orgmode = "[ORG]",
+                    }
+                    kind.kind = (strings[1] or "")
+                    kind.menu = menu[entry.source.name]
+                    return kind
+                end,
             },
         }
 
@@ -86,8 +107,8 @@ return  {
             sources = cmp.config.sources({
                 { name = "path" },
             }, {
-                { name = "cmdline" },
-            }),
+                    { name = "cmdline" },
+                }),
         })
     end,
 }

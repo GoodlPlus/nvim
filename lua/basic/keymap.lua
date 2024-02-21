@@ -82,8 +82,8 @@ vim.keymap.set({"n", "x"}, "?", "?\\v", { noremap = true })
 vim.keymap.set("x", "g/", "<Esc>/\\%V\\v", { noremap = true })
 vim.keymap.set("x", "g?", "<Esc>?\\%V\\v", { noremap = true })
 
-vim.keymap.set({ "n", "x" }, "*", "*N", { noremap = true })
-vim.keymap.set({ "n", "x" }, "#", "#N", { noremap = true })
+-- vim.keymap.set({ "n", "x" }, "*", "*N", { noremap = true })
+-- vim.keymap.set({ "n", "x" }, "#", "#N", { noremap = true })
 
 -- https://github.com/mhinz/vim-galore#saner-behavior-of-n-and-n
 -- vim.keymap.set("n", "n", "'Nn'[v:searchforward].'zv'", { expr = true, desc = "Next search result" })

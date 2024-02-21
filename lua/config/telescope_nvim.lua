@@ -36,7 +36,9 @@ return {
             },
             sorting_strategy = "ascending",
             prompt_prefix = " ",
-            selection_caret = "󰅂 ",
+            selection_caret = " ",
+            -- selection_caret = " ",
+            -- selection_caret = " ",
             border = true,
             dynamic_preview_title = false,
             results_title = false,
@@ -53,5 +55,6 @@ return {
         { "<leader>/", "<Cmd>Telescope live_grep<CR>", noremap = true },
         { "<leader>h", "<Cmd>Telescope help_tags<CR>", noremap = true },
         { "<leader>b", "<Cmd>Telescope buffers<CR>", noremap = true },
+        { "<leader><leader>", "<Cmd>Telescope resume<CR>", noremap = true },
     },
 }

@@ -12,7 +12,7 @@ return {
                 package_uninstalled = "✗"
             }
         },
-        ensure_installed = { "pylance" },
+        ensure_installed = { "pylance", "clangd", "lua-language-server" },
         registries = { "github:fecet/mason-registry" },
     },
 }

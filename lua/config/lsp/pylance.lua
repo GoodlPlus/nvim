@@ -7,7 +7,7 @@ return {
         local configs = require("lspconfig.configs")
         local capabilities = vim.lsp.protocol.make_client_capabilities()
         capabilities.workspace.didChangeWatchedFiles.dynamicRegistration = false
-        configs["pylance"] = {
+        configs.pylance = {
             default_config = {
                 filetypes = { "python" },
                 root_dir = util.root_pattern(unpack({
@@ -66,5 +66,6 @@ return {
                 },
             },
         }
+        opts.pylance = {}
     end,
 }
