@@ -1,5 +1,5 @@
 return {
-    "AlexvZyl/nordic.nvim",
+    "EdenEast/nightfox.nvim",
     lazy = true,
     event = "VeryLazy",
     config = true,

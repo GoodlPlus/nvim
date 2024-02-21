@@ -112,3 +112,14 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
         vim.fn.mkdir(vim.fn.fnamemodify(file, ":p:h"), "p")
     end,
 })
+
+--------------------------------------------------------------------------------
+-- gd in vim help
+--------------------------------------------------------------------------------
+vim.api.nvim_create_autocmd("FileType", {
+    group = utils.augroup("go_to_def_help"),
+    pattern = { "help" },
+    callback = function()
+        vim.keymap.set("n", "gd", "<c-]>")
+    end,
+})

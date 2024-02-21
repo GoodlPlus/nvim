@@ -17,17 +17,30 @@ return {
             },
             layout_strategy = "vertical",
             layout_config = {
-                prompt_position = "top",
-                width = 0.618,
-                height = 0.618,
+                horizontal = {
+                    width = 0.618,
+                    height = 0.618,
+                    preview_height = 0.5,
+                    prompt_position = "top",
+                    preview_position = "bottom",
+                    mirror = true,
+                },
+                vertical = {
+                    width = 0.618,
+                    height = 0.618,
+                    preview_height = 0.5,
+                    prompt_position = "top",
+                    preview_position = "bottom",
+                    mirror = true,
+                },
             },
             sorting_strategy = "ascending",
-            -- prompt_prefix = " ",
-            -- selection_caret = ">",
-        },
-        pickers = {
-        },
-        extensions = {
+            prompt_prefix = " ",
+            selection_caret = "󰅂 ",
+            border = true,
+            dynamic_preview_title = false,
+            results_title = false,
+            prompt_title = false,
         },
     },
     config = function(_, opts)
@@ -36,9 +49,9 @@ return {
         pcall(plugin.load_extension, "fzf")
     end,
     keys = {
-        { "<leader>f", "<Cmd>Telescope find_files<CR>", silent = true, noremap = true },
-        { "<leader>g", "<Cmd>Telescope live_grep<CR>", silent = true, noremap = true },
-        { "<leader>h", "<Cmd>Telescope help_tags<CR>", silent = true, noremap = true },
-        { "<leader>b", "<Cmd>Telescope buffers<CR>", silent = true, noremap = true },
+        { "<leader>f", "<Cmd>Telescope find_files<CR>", noremap = true },
+        { "<leader>/", "<Cmd>Telescope live_grep<CR>", noremap = true },
+        { "<leader>h", "<Cmd>Telescope help_tags<CR>", noremap = true },
+        { "<leader>b", "<Cmd>Telescope buffers<CR>", noremap = true },
     },
 }

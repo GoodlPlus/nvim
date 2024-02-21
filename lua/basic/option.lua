@@ -94,7 +94,7 @@ vim.opt.pumheight = 10
 vim.opt.complete:append { kspell = true }
 vim.opt.completeopt = { menu = true, menuone = true, noselect = true }
 
-vim.opt.shortmess = { a = true, s = true, t = true, c = true, C = true }
+vim.opt.shortmess = { a = true, s = true, t = true, c = true, C = true, F = true }
 
 vim.opt.updatetime = 500
 
