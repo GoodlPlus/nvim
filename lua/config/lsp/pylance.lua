@@ -2,6 +2,7 @@ return {
     "neovim/nvim-lspconfig",
     lazy = true,
     event = "VeryLazy",
+    ft = "python",
     opts = function(_, opts)
         local util = require("lspconfig.util")
         local configs = require("lspconfig.configs")

@@ -12,7 +12,7 @@ end
 vim.opt.rtp:prepend(lazy_path)
 require("lazy").setup({
     defaults = {
-        -- lazy = true, -- every plugin is lazy-loaded by default
+        lazy = true, -- every plugin is lazy-loaded by default
         version = false, -- always use the latest git commit
         -- version = "*", -- try installing the latest stable version for plugins that support semver
     },
@@ -25,17 +25,44 @@ require("lazy").setup({
         path = VIM_CONFIG_PATH .. "/lua/plugin",
     },
     checker = { enabled = false, frequency = 3600 * 24 }, -- automatically check for plugin updates
+    ui = {
+        icons = {
+        ft = "",
+        lazy = "󰂠 ",
+        loaded = "",
+        not_loaded = "",
+        },
+    },
     performance = {
         rtp = {
             disabled_plugins = {
-                "gzip",
-                "matchit",
-                "matchparen",
-                "netrwPlugin",
-                "tarPlugin",
+                "2html_plugin",
                 "tohtml",
-                "tutor",
+                "getscript",
+                "getscriptPlugin",
+                "gzip",
+                "logipat",
+                "netrw",
+                "netrwPlugin",
+                "netrwSettings",
+                "netrwFileHandlers",
+                "matchit",
+                "tar",
+                "tarPlugin",
+                "rrhelper",
+                "spellfile_plugin",
+                "vimball",
+                "vimballPlugin",
+                "zip",
                 "zipPlugin",
+                "tutor",
+                "rplugin",
+                "syntax",
+                "synmenu",
+                "optwin",
+                "compiler",
+                "bugreport",
+                "ftplugin",
             },
         },
     },

@@ -2,6 +2,7 @@ return {
     "neovim/nvim-lspconfig",
     lazy = true,
     event = "VeryLazy",
+    ft = "lua",
     opts = {
         lua_ls = {
             cmd = { VIM_DATA_PATH .. "/mason/bin/lua-language-server" },

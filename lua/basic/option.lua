@@ -15,6 +15,7 @@ vim.opt.fileencodings = { "utf-8", "ucs-bom", "gbk", "gb18030", "big5", "euc-jp"
 vim.opt.fileformat = "unix"
 vim.opt.fileformats = { "unix", "dos", "mac" }
 
+vim.opt.ruler = false
 vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.signcolumn = "yes"
@@ -105,6 +106,8 @@ vim.opt.report = 0
 
 -- Set timeout (default on)
 vim.opt.timeoutlen = 500
+
+vim.opt.undofile = true
 
 vim.cmd([[
 set diffopt+=algorithm:patience,indent-heuristic,vertical " see https://vimways.org/2018/the-power-of-diff
