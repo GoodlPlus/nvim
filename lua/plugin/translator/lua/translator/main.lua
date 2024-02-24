@@ -9,16 +9,17 @@ local function filter_text(text)
     local comment_prefix = utils.split(comment_string, " ")[1]
     local escape_comment_prefix = utils.escape(comment_prefix)
 
-    local filtered_text = {}
-    for i, part in ipairs(text) do
+    local lines = utils.split(text, "\n")
+    local filtered_lines = {}
+    for i, line in ipairs(lines) do
         if comment_prefix ~= nil and comment_prefix ~= "" then
-            part = string.gsub(part, "^%s*" .. escape_comment_prefix, "")
+            line = string.gsub(line, "^%s*" .. escape_comment_prefix, "")
         end
-        part = string.gsub(part, "^%s+", "")
-        part = string.gsub(part, "%s+$", "")
-        table.insert(filtered_text, part)
+        line = string.gsub(line, "^%s+", "")
+        line = string.gsub(line, "%s+$", "")
+        table.insert(filtered_lines, line)
     end
-    filtered_text = table.concat(filtered_text, "\n")
+    local filtered_text = table.concat(filtered_lines, "\n")
 
     -- start with "-\s" or "*\s" or "•\s" or "1.\s"
     -- end with ":\s\n"
