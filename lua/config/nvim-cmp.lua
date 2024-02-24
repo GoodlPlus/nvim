@@ -1,3 +1,46 @@
+local kind_to_icon = {
+    Namespace = "󰌗",
+    Text = "󰉿",
+    Method = "󰆧",
+    Function = "󰆧",
+    Constructor = "",
+    Field = "󰜢",
+    Variable = "󰀫",
+    Class = "󰠱",
+    Interface = "",
+    Module = "",
+    Property = "󰜢",
+    Unit = "󰑭",
+    Value = "󰎠",
+    Enum = "",
+    Keyword = "󰌋",
+    Snippet = "",
+    Color = "󰏘",
+    File = "󰈚",
+    Reference = "󰈇",
+    Folder = "󰉋",
+    EnumMember = "",
+    Constant = "󰏿",
+    Struct = "󰙅",
+    Event = "",
+    Operator = "󰆕",
+    TypeParameter = "󰊄",
+    Table = "",
+    Object = "󰅩",
+    Tag = "",
+    Array = "[]",
+    Boolean = "",
+    Number = "",
+    Null = "󰟢",
+    String = "󰉿",
+    Calendar = "",
+    Watch = "󰥔",
+    Package = "",
+    Copilot = "",
+    Codeium = "",
+    TabNine = "",
+}
+
 return  {
     "hrsh7th/nvim-cmp",
     lazy = true,
@@ -9,11 +52,9 @@ return  {
         { "hrsh7th/cmp-cmdline", lazy = true, event = "VeryLazy" },
         -- { "saadparwaiz1/cmp_luasnip", lazy = true, event = "VeryLazy" },
         -- { "L3MON4D3/LuaSnip", lazy = true, event = "VeryLazy" },
-        { "onsails/lspkind-nvim", lazy = true, event = "VeryLazy" },
     },
     config = function()
         local cmp = require("cmp")
-        local lspkind = require("lspkind")
 
         local has_words_before = function()
             unpack = unpack or table.unpack
@@ -21,7 +62,7 @@ return  {
             return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
         end
 
-        cmp.setup {
+        cmp.setup({
             completion = {
                 autocomplete = false,
             },
@@ -68,33 +109,14 @@ return  {
                     { name = "path" },
                 }),
             formatting = {
-                format = lspkind.cmp_format {
-                    mode = "symbol_text",
-                    maxwidth = 50,
-                },
-            },
-            -- formatting = {
-            --     fields = { "abbr", "kind", "menu" },
-            --     format = function(entry, vim_item)
-            --         vim.print(entry, vim_item)
-            --         local kind = require("lspkind").cmp_format({ mode = "symbol", maxwidth = 50 })(entry, vim_item)
-            --         local strings = vim.split(kind.kind, "%s", { trimempty = true })
-            --         local menu = {
-            --             luasnip = "[SNP]",
-            --             nvim_lsp = "[LSP]",
-            --             nvim_lua = "[VIM]",
-            --             buffer = "[BUF]",
-            --             path = "[PTH]",
-            --             calc = "[CLC]",
-            --             latex_symbols = "[TEX]",
-            --             orgmode = "[ORG]",
-            --         }
-            --         kind.kind = (strings[1] or "")
-            --         kind.menu = menu[entry.source.name]
-            --         return kind
-            --     end,
-            -- },
-        }
+                fields = { "abbr", "kind", "menu" },
+                format = function(_, item)
+                    local icon = kind_to_icon[item.kind] or ""
+                    item.kind = string.format("%s %s", icon, item.kind or "")
+                    return item
+                end,
+            }
+        })
 
         cmp.setup.cmdline({ "/", "?" }, {
             mapping = cmp.mapping.preset.cmdline(),
