@@ -52,8 +52,8 @@ end
 --     return ret
 -- end
 
-vim.opt.linebreak = true
-vim.opt.breakindent = true
+-- vim.opt.linebreak = true
+-- vim.opt.breakindent = true
 vim.opt.copyindent = true
 
 vim.opt.splitbelow = true -- Horizontal splits will be below
@@ -107,6 +107,7 @@ vim.opt.report = 0
 -- Set timeout (default on)
 vim.opt.timeoutlen = 500
 
+vim.opt.directory = ".,~/tmp,/var/tmp,/tmp"
 vim.opt.undofile = true
 
 vim.cmd([[
