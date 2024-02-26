@@ -113,9 +113,22 @@ return  {
                 format = function(_, item)
                     local icon = kind_to_icon[item.kind] or ""
                     item.kind = string.format("%s %s", icon, item.kind or "")
+                    item.abbr = string.sub(item.abbr, 1, 50)
                     return item
                 end,
-            }
+            },
+            window = {
+                completion = {
+                    border = "rounded",
+                    winhighlight = "Normal:Normal,FloatBorder:FloatBorder,CursorLine:Visual,Search:None",
+                    scrollbar = false,
+                },
+                documentation = {
+                    border = "rounded",
+                    winhighlight = "Normal:Normal,FloatBorder:FloatBorder,CursorLine:Visual,Search:None",
+                    scrollbar = false,
+                },
+            },
         })
 
         cmp.setup.cmdline({ "/", "?" }, {

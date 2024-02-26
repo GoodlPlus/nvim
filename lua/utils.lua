@@ -14,7 +14,7 @@ function M.get_selected_text(mode)
     elseif vim.list_contains({ "v", "V", "" }, mode) then
         return M.get_visual_selected_text()
     else
-        vim.notify("translator: invalid mode", vim.log.levels.ERROR)
+        vim.notify("utils: invalid mode", vim.log.levels.ERROR)
     end
 end
 
@@ -37,6 +37,13 @@ function M.split(input_str, sep)
             return strs
         end
     end
+end
+
+function M.strip(str, char)
+    char = char or "%s"
+    str = string.gsub(str, "^" .. char .. "+", "")
+    str = string.gsub(str, char .. "+" .. "$", "")
+    return str
 end
 
 function M.escape(str)

@@ -2,5 +2,7 @@ return {
     "xiyaowong/transparent.nvim",
     lazy = true,
     event = "VeryLazy",
-    config = true,
+    opts = {
+        -- exclude_groups = { "StatusLine", "StatusLineNC" }, -- table: groups you don't want to clear
+    },
 }

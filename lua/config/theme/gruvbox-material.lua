@@ -28,6 +28,8 @@ return {
             let g:gruvbox_material_lightline_disable_bold = 0
             let g:gruvbox_material_better_performance = 1
             colorscheme gruvbox-material
+            highlight FloatBorder ctermbg=NONE guibg=NONE
+            highlight NormalFloat ctermbg=NONE guibg=NONE
             ]])
     end
 }

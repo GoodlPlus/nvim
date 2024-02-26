@@ -6,6 +6,9 @@ return {
     build = ":MasonUpdate",
     opts = {
         ui = {
+            border = "rounded",
+            width = 0.618,
+            height = 0.618,
             icons = {
                 package_installed = "✓",
                 package_pending = "➜",

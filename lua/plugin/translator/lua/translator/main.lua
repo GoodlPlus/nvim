@@ -1,7 +1,6 @@
 local M = {}
 
 local utils = require("utils")
-local job = require("plenary.job")
 local popup = require("plenary.popup")
 
 local function filter_text(text)
@@ -11,12 +10,11 @@ local function filter_text(text)
 
     local lines = utils.split(text, "\n")
     local filtered_lines = {}
-    for i, line in ipairs(lines) do
+    for _, line in ipairs(lines) do
         if comment_prefix ~= nil and comment_prefix ~= "" then
             line = string.gsub(line, "^%s*" .. escape_comment_prefix, "")
         end
-        line = string.gsub(line, "^%s+", "")
-        line = string.gsub(line, "%s+$", "")
+        line = utils.strip(line)
         table.insert(filtered_lines, line)
     end
     local filtered_text = table.concat(filtered_lines, "\n")
@@ -39,7 +37,7 @@ end
 
 local function get_max_line_width(lines)
     local max_width = 0
-    for i, line in ipairs(lines) do
+    for _, line in ipairs(lines) do
         local width = vim.api.nvim_strwidth(line)
         max_width = math.max(max_width, width)
     end
@@ -48,7 +46,7 @@ end
 
 local function compute_height(lines, max_width)
     local height = 0
-    for i, line in ipairs(lines) do
+    for _, line in ipairs(lines) do
         local width = math.max(vim.api.nvim_strwidth(line), 1)
         height = height + math.ceil(width / max_width)
     end
@@ -70,7 +68,7 @@ local function compute_window_width_height(lines, window_width, window_height)
     return width, height
 end
 
-local function process_ouput(self, code, signal)
+local function process_ouput(output)
     local function show(response)
         response = vim.json.decode(response)
         local text = response.data
@@ -100,12 +98,12 @@ local function process_ouput(self, code, signal)
         end
 
         -- create popup to show translate result
-        current_window_width = vim.api.nvim_win_get_width(0)
-        current_window_height = vim.api.nvim_win_get_height(0)
-        width, height = compute_window_width_height(lines, current_window_width, current_window_height)
+        local current_window_width = vim.api.nvim_win_get_width(0)
+        local current_window_height = vim.api.nvim_win_get_height(0)
+        local width, height = compute_window_width_height(lines, current_window_width, current_window_height)
         popup.create(lines,
             {
-                line = "cursor+1",
+                line = "cursor+2",
                 col = "cursor",
                 width = width,
                 height = height,
@@ -113,40 +111,35 @@ local function process_ouput(self, code, signal)
                 minheight = height,
                 maxwidth = width,
                 maxheight = height,
+                border = true,
+                borderchars = {  "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
                 enter = false,
                 finalize_callback = finalize_callback,
             }
         )
     end
 
-    if code == 0 then
-        local stdout = table.concat(self:result(), "\n")
-        vim.schedule_wrap(show)(stdout)
+    if output.code == 0 then
+        vim.schedule_wrap(show)(output.stdout)
     else
-        local stderr = table.concat(self:stderr_result(), "\n")
-        vim.notify("translator: " .. stderr, vim.log.levels.ERROR)
+        vim.notify("translator: " .. output.stderr, vim.log.levels.ERROR)
     end
 end
 
 local function translate(text)
     local data = { text = text, target_lang = "zh" }
     data = vim.json.encode(data)
-    local results = {}
-    job:new(
-        {
-            command = "curl",
-            args = {
-                "--location",
-                "https://service-cux6rntx-1304954655.bj.tencentapigw.com.cn/release/translate",
-                "--header",
-                "Content-Type: application/json",
-                "--data",
-                data,
-            },
-            cwd = "/usr/bin",
-            on_exit = process_ouput,
-        }
-    ):start()
+    vim.system({
+        "curl",
+        "--location",
+        "https://service-cux6rntx-1304954655.bj.tencentapigw.com.cn/release/translate",
+        "--header",
+        "Content-Type: application/json",
+        "--data",
+        data,
+    },
+        { timeout = 5000 },
+        process_ouput)
 end
 
 function M.main(mode, opts)

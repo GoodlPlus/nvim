@@ -81,7 +81,9 @@ vim.opt.whichwrap = "<,>,[,]"
 vim.opt.list = true
 vim.opt.listchars = { leadmultispace = "╏   " }
 
-vim.opt.matchpairs:append { "<:>" }
+vim.opt.matchpairs:append({ "<:>" })
+
+-- vim.opt.showmatch = true
 
 vim.opt.mouse = { n = true }
 
@@ -89,11 +91,12 @@ vim.opt.showmode = false
 
 -- Set tabline
 vim.opt.showtabline = 2
+vim.opt.laststatus = 3
 
 vim.opt.pumheight = 10
 
-vim.opt.complete:append { kspell = true }
-vim.opt.completeopt = { menu = true, menuone = true, noselect = true }
+vim.opt.complete:append({ kspell = true })
+vim.opt.completeopt = { menu = true, menuone = true, popup = true }
 
 vim.opt.shortmess = { a = true, s = true, t = true, c = true, C = true, F = true }
 

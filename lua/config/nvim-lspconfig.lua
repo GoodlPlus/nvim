@@ -1,8 +1,27 @@
 local function replace_diagnostic_sign()
-    local signs = { Error = "", Warn = "", Hint = "󰌵", Info = "" }
+    local signs = { Error = "", Warn = "", Hint = "󰌶", Info = "" }
     for type, icon in pairs(signs) do
         local hl = "DiagnosticSign" .. type
         vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
+    end
+end
+
+local function init_float_window()
+    local border = {
+        { "╭", "FloatBorder" },
+        { "─", "FloatBorder" },
+        { "╮", "FloatBorder" },
+        { "│", "FloatBorder" },
+        { "╯", "FloatBorder" },
+        { "─", "FloatBorder" },
+        { "╰", "FloatBorder" },
+        { "│", "FloatBorder" },
+    }
+    local vim_lsp_util_open_floating_preview = vim.lsp.util.open_floating_preview
+    function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
+        opts = opts or {}
+        opts.border = opts.border or border
+        return vim_lsp_util_open_floating_preview(contents, syntax, opts, ...)
     end
 end
 
@@ -39,6 +58,8 @@ return {
                 vim.keymap.set("n", "<leader>r", vim.lsp.buf.rename, keymap_opts)
                 vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, keymap_opts)
                 vim.diagnostic.disable()
+                -- vim.lsp.inlay_hint.enable()
+                init_float_window()
             end,
         })
     end,

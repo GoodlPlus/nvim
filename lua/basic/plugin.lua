@@ -19,6 +19,7 @@ require("lazy").setup({
     spec = {
         { import = "config" },
         { import = "config.lsp" },
+        { import = "config.theme" },
     },
     lockfile = VIM_CONFIG_PATH .. "/cache/lazy-lock.json",
     dev = {
@@ -26,12 +27,14 @@ require("lazy").setup({
     },
     checker = { enabled = false, frequency = 3600 * 24 }, -- automatically check for plugin updates
     ui = {
+        size = { width = 0.618, height = 0.618 },
         icons = {
         ft = "",
         lazy = "󰂠 ",
         loaded = "",
         not_loaded = "",
         },
+        border = "rounded",
     },
     performance = {
         rtp = {
@@ -67,5 +70,4 @@ require("lazy").setup({
         },
     },
 })
--- neogit
--- Undotree
+require("lazy.view.config").keys.close = "<Esc>"
