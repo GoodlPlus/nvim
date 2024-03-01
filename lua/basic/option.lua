@@ -2,7 +2,7 @@ if vim.fn.has('nvim-0.10') == 0 then
     vim.opt.termguicolors = true -- Enable gui colors
 end
 
-vim.env.LANG = "en"
+vim.env.LANG = "en_US.UTF-8"
 
 vim.g.mapleader = " "
 
@@ -91,7 +91,7 @@ vim.opt.showmode = false
 
 -- Set tabline
 vim.opt.showtabline = 2
-vim.opt.laststatus = 3
+-- vim.opt.laststatus = 3
 
 vim.opt.pumheight = 10
 

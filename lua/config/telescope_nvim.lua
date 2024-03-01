@@ -4,7 +4,7 @@ local function create_command_of_fuzzy_find(command, command_function)
     vim.api.nvim_create_user_command(
         command,
         function(opts)
-            local mode = utils.ternary(opts.range == 0, vim.fn.mode(), vim.fn.visualmode())
+            local mode = (opts.range == 0 and { vim.fn.mode() } or { vim.fn.visualmode() })[1]
             command_function(mode, opts)
         end,
         {

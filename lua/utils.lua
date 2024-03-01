@@ -1,12 +1,20 @@
 local M = {}
 
+function M.round(num)
+    if num >= 0 then
+        return math.floor(num + 0.5)
+    else
+        return math.ceil(num - 0.5)
+    end
+end
+
 function M.exist(set, key)
     return set[key] ~= nil
 end
 
-function M.ternary(condition, first, second)
-    return (condition and { first } or { second })[1]
-end
+-- function M.ternary(condition, first, second)
+--     return (condition and { first } or { second })[1]
+-- end
 
 function M.get_selected_text(mode)
     if mode == "n" then
@@ -22,7 +30,7 @@ function M.get_visual_selected_text()
     local start_pos = vim.fn.getpos("'<")
     local end_pos = vim.fn.getpos("'>")
     local max_col = vim.v.maxcol
-    local lines = vim.api.nvim_buf_get_text(0, start_pos[2] - 1, start_pos[3] - 1, end_pos[2] - 1, M.ternary(end_pos[3] == max_col, -1, end_pos[3]), {})
+    local lines = vim.api.nvim_buf_get_text(0, start_pos[2] - 1, start_pos[3] - 1, end_pos[2] - 1, (end_pos[3] == max_col and { -1 } or { end_pos[3] })[1], {})
     local text = table.concat(lines, "\n")
     return text
 end

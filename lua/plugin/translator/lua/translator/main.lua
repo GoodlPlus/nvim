@@ -53,7 +53,7 @@ local function compute_height(lines, max_width)
     return height
 end
 
-local function compute_window_width_height(lines, window_width, window_height)
+local function compute_window_width_and_height(lines, window_width, window_height)
     local max_line_width = get_max_line_width(lines)
     local ratio = 0.618
     local new_ratio = 0.618
@@ -68,6 +68,63 @@ local function compute_window_width_height(lines, window_width, window_height)
     return width, height
 end
 
+-- local function process_ouput(output)
+--     local function show(response)
+--         response = vim.json.decode(response)
+--         local text = response.data
+--         local lines = utils.split(text, "\n")
+--
+--         -- close window when cursor moved
+--         local finalize_callback = function(win_id, bufnr)
+--             vim.api.nvim_set_option_value("linebreak", false, { win = win_id })
+--             vim.api.nvim_set_option_value("breakindent", false, { win = win_id })
+--             vim.api.nvim_create_autocmd(
+--                 { "CursorMoved", "CursorMovedI", "InsertEnter", "BufLeave" },
+--                 {
+--                     group = utils.augroup("translator_popup"),
+--                     buffer = 0,
+--                     callback = function()
+--                         if vim.api.nvim_win_is_valid(win_id) then
+--                             vim.api.nvim_win_close(win_id, true)
+--                         end
+--                         if vim.api.nvim_buf_is_valid(bufnr) then
+--                             vim.api.nvim_buf_delete(bufnr, {})
+--                         end
+--                     end,
+--                     once = true, -- process only once
+--                     nested = true,
+--                 }
+--             )
+--         end
+--
+--         -- create popup to show translate result
+--         local current_window_width = vim.api.nvim_win_get_width(0)
+--         local current_window_height = vim.api.nvim_win_get_height(0)
+--         local width, height = compute_window_width_and_height(lines, current_window_width, current_window_height)
+--         popup.create(lines,
+--             {
+--                 line = "cursor+2",
+--                 col = "cursor",
+--                 width = width,
+--                 height = height,
+--                 minwidth = width,
+--                 minheight = height,
+--                 maxwidth = width,
+--                 maxheight = height,
+--                 border = true,
+--                 borderchars = {  "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
+--                 enter = false,
+--                 finalize_callback = finalize_callback,
+--             }
+--         )
+--     end
+--
+--     if output.code == 0 then
+--         vim.schedule_wrap(show)(output.stdout)
+--     else
+--         vim.schedule_wrap(vim.notify)("translator: " .. output.stderr, vim.log.levels.ERROR)
+--     end
+-- end
 local function process_ouput(output)
     local function show(response)
         response = vim.json.decode(response)
@@ -76,8 +133,6 @@ local function process_ouput(output)
 
         -- close window when cursor moved
         local finalize_callback = function(win_id, bufnr)
-            vim.api.nvim_set_option_value("linebreak", false, { win = win_id })
-            vim.api.nvim_set_option_value("breakindent", false, { win = win_id })
             vim.api.nvim_create_autocmd(
                 { "CursorMoved", "CursorMovedI", "InsertEnter", "BufLeave" },
                 {
@@ -100,7 +155,7 @@ local function process_ouput(output)
         -- create popup to show translate result
         local current_window_width = vim.api.nvim_win_get_width(0)
         local current_window_height = vim.api.nvim_win_get_height(0)
-        local width, height = compute_window_width_height(lines, current_window_width, current_window_height)
+        local width, height = compute_window_width_and_height(lines, current_window_width, current_window_height)
         popup.create(lines,
             {
                 line = "cursor+2",
@@ -127,18 +182,18 @@ local function process_ouput(output)
 end
 
 local function translate(text)
-    local data = { text = text, target_lang = "zh" }
+    local data = { text = text, target_language = "zh" }
     data = vim.json.encode(data)
     vim.system({
         "curl",
         "--location",
-        "https://service-cux6rntx-1304954655.bj.tencentapigw.com.cn/release/translate",
+        "https://gob6qv7s.fn.bytedance.net/DeepL",
         "--header",
         "Content-Type: application/json",
         "--data",
         data,
     },
-        { timeout = 5000 },
+        { timeout = 10000 },
         process_ouput)
 end
 

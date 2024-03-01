@@ -47,7 +47,7 @@ return  {
     event = "VeryLazy",
     dependencies = {
         { "hrsh7th/cmp-nvim-lsp", lazy = true, event = "VeryLazy" },
-        { "hrsh7th/cmp-buffer", lazy = true, event = "VeryLazy" },
+        -- { "hrsh7th/cmp-buffer", lazy = true, event = "VeryLazy" },
         { "hrsh7th/cmp-path", lazy = true, event = "VeryLazy" },
         { "hrsh7th/cmp-cmdline", lazy = true, event = "VeryLazy" },
         -- { "saadparwaiz1/cmp_luasnip", lazy = true, event = "VeryLazy" },
@@ -77,7 +77,7 @@ return  {
                         snippy.expand_or_advance() ]]
                     elseif has_words_before() then
                         cmp.complete()
-                        cmp.select_next_item()
+                        -- cmp.select_next_item()
                     else
                         fallback()
                     end
@@ -90,7 +90,7 @@ return  {
                         snippy.expand_or_advance() ]]
                     elseif has_words_before() then
                         cmp.complete()
-                        cmp.select_prev_item()
+                        -- cmp.select_prev_item()
                     else
                         fallback()
                     end
@@ -105,7 +105,7 @@ return  {
                 { name = "nvim_lsp" },
                 -- { name = "luasnip" },
             }, {
-                    { name = "buffer" },
+                    -- { name = "buffer" },
                     { name = "path" },
                 }),
             formatting = {
@@ -120,23 +120,23 @@ return  {
             window = {
                 completion = {
                     border = "rounded",
-                    winhighlight = "Normal:Normal,FloatBorder:FloatBorder,CursorLine:Visual,Search:None",
+                    winhighlight = "Normal:Normal,FloatBorder:FloatBorder,CursorLine:Visual,Search:NONE",
                     scrollbar = false,
                 },
                 documentation = {
                     border = "rounded",
-                    winhighlight = "Normal:Normal,FloatBorder:FloatBorder,CursorLine:Visual,Search:None",
+                    winhighlight = "Normal:Normal,FloatBorder:FloatBorder,CursorLine:Visual,Search:NONE",
                     scrollbar = false,
                 },
             },
         })
 
-        cmp.setup.cmdline({ "/", "?" }, {
-            mapping = cmp.mapping.preset.cmdline(),
-            sources = {
-                { name = "buffer" },
-            },
-        })
+        -- cmp.setup.cmdline({ "/", "?" }, {
+        --     mapping = cmp.mapping.preset.cmdline(),
+        --     sources = {
+        --         { name = "buffer" },
+        --     },
+        -- })
 
         cmp.setup.cmdline(":", {
             mapping = cmp.mapping.preset.cmdline(),
