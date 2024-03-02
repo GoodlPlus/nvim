@@ -168,7 +168,7 @@ local function diagnostics()
     return concat(diagnostics_list)
 end
 
-local function line_percent()
+local function percent()
     local bufnr = get_status_line_bufnr()
     local current_pos = vim.fn.getcurpos(vim.g.statusline_winid)
     local line_count = vim.api.nvim_buf_line_count(bufnr)
@@ -178,6 +178,11 @@ local function line_percent()
     return add_pad(percent_text)
 end
 
+function M.init()
+    default_highlight_group = get_highlight_group("status_line_text", default_fg, default_bg)
+    pad_highlight_group = get_highlight_group("status_line_pad", default_bg, "NONE")
+end
+
 function M.status_line()
     local modules = {
         "",
@@ -185,7 +190,7 @@ function M.status_line()
         git(),
         "%=",
         diagnostics(),
-        line_percent(),
+        percent(),
         "",
     }
     local exist_modules = {}
@@ -195,11 +200,6 @@ function M.status_line()
         end
     end
     return table.concat(exist_modules, " ")
-end
-
-function M.init()
-    default_highlight_group = get_highlight_group("status_line_text", default_fg, default_bg)
-    pad_highlight_group = get_highlight_group("status_line_pad", default_bg, "NONE")
 end
 
 return M
