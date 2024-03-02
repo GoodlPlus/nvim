@@ -1,7 +1,6 @@
 local M = {}
 
 local utils = require("utils")
-local popup = require("plenary.popup")
 
 local function filter_text(text)
     local comment_string = vim.api.nvim_get_option_value("commentstring", { scope = "local" })
@@ -79,7 +78,7 @@ local function process_ouput(output)
         local lines = utils.split(text, "\n")
 
         -- close window when cursor moved
-        local finalize_callback = function(win_id, bufnr)
+        local function finalize_callback(win_id, bufnr)
             vim.api.nvim_create_autocmd(
                 { "CursorMoved", "CursorMovedI", "InsertEnter", "BufLeave" },
                 {
@@ -103,10 +102,10 @@ local function process_ouput(output)
         local current_window_width = vim.api.nvim_win_get_width(0)
         local current_window_height = vim.api.nvim_win_get_height(0)
         local width, height = compute_window_width_and_height(lines, current_window_width, current_window_height)
-        bufnr = vim.api.nvim_create_buf(false, false)
+        local bufnr = vim.api.nvim_create_buf(false, false)
         vim.api.nvim_set_option_value("bufhidden", "wipe", { buf = bufnr })
         vim.api.nvim_buf_set_lines(bufnr, 0, -1, true, lines)
-        win_opts = {
+        local win_opts = {
             relative = "cursor",
             anchor = "SW",
             width = width,
@@ -118,7 +117,7 @@ local function process_ouput(output)
             border = "rounded",
             noautocmd = true,
         }
-        win_id = vim.api.nvim_open_win(bufnr, false, win_opts)
+        local win_id = vim.api.nvim_open_win(bufnr, false, win_opts)
         finalize_callback(win_id, bufnr)
     end
 
