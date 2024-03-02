@@ -7,7 +7,7 @@ local LEFT = ""
 local RIGHT = ""
 local highlight_group_prefix = "GoodlPlus_"
 local default_fg = vim.api.nvim_get_hl(0, { name = "Normal" }).fg
-local default_bg = "#282828"
+local default_bg = "#32302f"
 
 local default_highlight_group
 local pad_highlight_group
@@ -169,9 +169,10 @@ local function diagnostics()
 end
 
 local function line_percent()
-    local current_pos = vim.fn.getpos(".")
-    local end_pos = vim.fn.getpos("$")
-    local percent = math.floor((current_pos[2] - 1) * 100 / end_pos[2])
+    local bufnr = get_status_line_bufnr()
+    local current_pos = vim.fn.getcurpos(vim.g.statusline_winid)
+    local line_count = vim.api.nvim_buf_line_count(bufnr)
+    local percent = math.floor((current_pos[2] - 1) * 100 / line_count)
     local percent_text = string.format("%2d", percent)
     percent_text = get_default_highlighted_text("  " .. percent_text .. "%% ")
     return add_pad(percent_text)

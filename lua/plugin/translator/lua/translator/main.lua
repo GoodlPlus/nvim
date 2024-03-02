@@ -68,65 +68,12 @@ local function compute_window_width_and_height(lines, window_width, window_heigh
     return width, height
 end
 
--- local function process_ouput(output)
---     local function show(response)
---         response = vim.json.decode(response)
---         local text = response.data
---         local lines = utils.split(text, "\n")
---
---         -- close window when cursor moved
---         local finalize_callback = function(win_id, bufnr)
---             vim.api.nvim_set_option_value("linebreak", false, { win = win_id })
---             vim.api.nvim_set_option_value("breakindent", false, { win = win_id })
---             vim.api.nvim_create_autocmd(
---                 { "CursorMoved", "CursorMovedI", "InsertEnter", "BufLeave" },
---                 {
---                     group = utils.augroup("translator_popup"),
---                     buffer = 0,
---                     callback = function()
---                         if vim.api.nvim_win_is_valid(win_id) then
---                             vim.api.nvim_win_close(win_id, true)
---                         end
---                         if vim.api.nvim_buf_is_valid(bufnr) then
---                             vim.api.nvim_buf_delete(bufnr, {})
---                         end
---                     end,
---                     once = true, -- process only once
---                     nested = true,
---                 }
---             )
---         end
---
---         -- create popup to show translate result
---         local current_window_width = vim.api.nvim_win_get_width(0)
---         local current_window_height = vim.api.nvim_win_get_height(0)
---         local width, height = compute_window_width_and_height(lines, current_window_width, current_window_height)
---         popup.create(lines,
---             {
---                 line = "cursor+2",
---                 col = "cursor",
---                 width = width,
---                 height = height,
---                 minwidth = width,
---                 minheight = height,
---                 maxwidth = width,
---                 maxheight = height,
---                 border = true,
---                 borderchars = {  "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
---                 enter = false,
---                 finalize_callback = finalize_callback,
---             }
---         )
---     end
---
---     if output.code == 0 then
---         vim.schedule_wrap(show)(output.stdout)
---     else
---         vim.schedule_wrap(vim.notify)("translator: " .. output.stderr, vim.log.levels.ERROR)
---     end
--- end
 local function process_ouput(output)
     local function show(response)
+        if response == nil or response == "" then
+            vim.schedule_wrap(vim.notify)("translator: response is empty", vim.log.levels.ERROR)
+            return
+        end
         response = vim.json.decode(response)
         local text = response.data
         local lines = utils.split(text, "\n")
@@ -156,28 +103,29 @@ local function process_ouput(output)
         local current_window_width = vim.api.nvim_win_get_width(0)
         local current_window_height = vim.api.nvim_win_get_height(0)
         local width, height = compute_window_width_and_height(lines, current_window_width, current_window_height)
-        popup.create(lines,
-            {
-                line = "cursor+2",
-                col = "cursor",
-                width = width,
-                height = height,
-                minwidth = width,
-                minheight = height,
-                maxwidth = width,
-                maxheight = height,
-                border = true,
-                borderchars = {  "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
-                enter = false,
-                finalize_callback = finalize_callback,
-            }
-        )
+        bufnr = vim.api.nvim_create_buf(false, false)
+        vim.api.nvim_set_option_value("bufhidden", "wipe", { buf = bufnr })
+        vim.api.nvim_buf_set_lines(bufnr, 0, -1, true, lines)
+        win_opts = {
+            relative = "cursor",
+            anchor = "SW",
+            width = width,
+            height = height,
+            row = 0,
+            col = 0,
+            focusable = false,
+            style = "minimal",
+            border = "rounded",
+            noautocmd = true,
+        }
+        win_id = vim.api.nvim_open_win(bufnr, false, win_opts)
+        finalize_callback(win_id, bufnr)
     end
 
     if output.code == 0 then
         vim.schedule_wrap(show)(output.stdout)
     else
-        vim.notify("translator: " .. output.stderr, vim.log.levels.ERROR)
+        vim.schedule_wrap(vim.notify)("translator: " .. output.stderr, vim.log.levels.ERROR)
     end
 end
 

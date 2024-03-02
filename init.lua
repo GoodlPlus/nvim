@@ -5,3 +5,5 @@ require("basic.option")
 require("basic.keymap")
 require("basic.autocmd")
 require("basic.plugin")
+
+vim.cmd[[colorscheme gruvbox-material]]

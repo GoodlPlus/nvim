@@ -1,7 +1,9 @@
 return {
     "sainnhe/gruvbox-material",
-    lazy = false,
-    priority = 1000,
+    lazy = true,
+    event = "VeryLazy",
+    -- lazy = false,
+    -- priority = 1000,
     config = function()
         vim.cmd([[
             let g:gruvbox_material_background = "hard"
@@ -27,7 +29,6 @@ return {
             let g:gruvbox_material_statusline_style = "default"
             let g:gruvbox_material_lightline_disable_bold = 0
             let g:gruvbox_material_better_performance = 1
-            colorscheme gruvbox-material
             highlight FloatBorder ctermbg=NONE guibg=NONE
             highlight NormalFloat ctermbg=NONE guibg=NONE
             ]])
