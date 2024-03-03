@@ -5,14 +5,21 @@ local devicons = require("nvim-web-devicons")
 
 local LEFT = ""
 local RIGHT = ""
-local highlight_group_prefix = "GoodlPlus_"
-local default_fg = vim.api.nvim_get_hl(0, { name = "Normal" }).fg
-local default_bg = "#32302f"
 
-local default_highlight_group
-local pad_highlight_group
+local HIGHLIGHT_GROUP_PREFIX = "GoodlPlus_status_line"
 
-local file_config = {}
+local SELECTED_FG = vim.api.nvim_get_hl(0, { name = "Normal" }).fg
+local SELECTED_BG = "#32302f"
+local SELECTED_HIGHLIGHT_GROUP
+local SELECTED_PAD_HIGHLIGHT_GROUP
+
+local UNSELECTED_FG = vim.api.nvim_get_hl(0, { name = "Comment" }).fg
+-- local UNSELECTED_BG = "#32302f"
+local UNSELECTED_BG = "#282828"
+local UNSELECTED_HIGHLIGHT_GROUP
+local UNSELECTED_PAD_HIGHLIGHT_GROUP
+
+local icon_highlight_groups = {}
 
 local diagnostics_config = {
     error_highlight_group = nil,
@@ -34,7 +41,7 @@ local function is_active_window()
 end
 
 local function get_highlight_group(highlight_group, fg, bg)
-    highlight_group = highlight_group_prefix .. highlight_group
+    highlight_group = HIGHLIGHT_GROUP_PREFIX .. highlight_group
     local highlight_group_info = vim.api.nvim_get_hl(0, { name = highlight_group, create = false })
     if next(highlight_group_info) == nil then
         vim.api.nvim_set_hl(0, highlight_group, { fg = fg, bg = bg })
@@ -55,28 +62,33 @@ local function get_highlighted_text(text, highlight_group)
 end
 
 local function get_default_highlighted_text(text)
-    return "%#" .. default_highlight_group .. "#" .. text .. "%*"
+    local highlight_group = (is_active_window() and { SELECTED_HIGHLIGHT_GROUP } or { UNSELECTED_HIGHLIGHT_GROUP })[1]
+    return "%#" .. highlight_group .. "#" .. text .. "%*"
 end
 
 local function add_pad(text)
+    if text == nil or text == "" then
+        return ""
+    end
+    local pad_highlight_group = (is_active_window() and { SELECTED_PAD_HIGHLIGHT_GROUP } or { UNSELECTED_PAD_HIGHLIGHT_GROUP })[1]
     local left_pad = get_highlighted_text(LEFT, pad_highlight_group)
     local right_pad = get_highlighted_text(RIGHT, pad_highlight_group) .. "%*"
     return left_pad .. text .. right_pad
 end
 
-local function concat(parts)
+local function concat(parts, sep)
     local existing_parts = {}
-    table.insert(existing_parts, "")
     for _, part in ipairs(parts) do
         if #part ~= 0 then
             table.insert(existing_parts, part)
         end
     end
-    table.insert(existing_parts, "")
-    if #existing_parts <= 2 then
+    if #existing_parts == 0 then
         return nil
     else
-        return add_pad(table.concat(existing_parts, get_default_highlighted_text(" ")))
+        table.insert(existing_parts, 1, "")
+        table.insert(existing_parts, "")
+        return table.concat(existing_parts, sep)
     end
 end
 
@@ -84,19 +96,19 @@ local function file()
     local bufnr = get_status_line_bufnr()
     local path = vim.api.nvim_buf_get_name(bufnr)
     path = vim.fn.fnamemodify(path, ":~")
-    local name = string.match(path, "([^/\\]+)[/\\]*$")
+    local name = vim.fn.fnamemodify(path, ":t")
     local icon, highlight_group = devicons.get_icon(name)
-    local icon_highlight_group = file_config[highlight_group]
+    local icon_highlight_group = icon_highlight_groups[highlight_group]
     if icon_highlight_group == nil then
         local _, color = devicons.get_icon_color(name)
-        icon_highlight_group = get_highlight_group(highlight_group, color, default_bg)
-        file_config[highlight_group] = icon_highlight_group
+        icon_highlight_group = get_highlight_group(highlight_group, color, SELECTED_BG)
+        icon_highlight_groups[highlight_group] = icon_highlight_group
     end
     local highlighted_icon = get_highlighted_text(icon, icon_highlight_group)
     local highlighted_path = get_default_highlighted_text(path)
     local modified = (vim.bo[bufnr].modified == true and { get_default_highlighted_text("") } or { "" })[1]
     local parts = { highlighted_icon, highlighted_path, modified }
-    return concat(parts)
+    return add_pad(concat(parts, get_default_highlighted_text(" ")))
 end
 
 local function git()
@@ -124,7 +136,7 @@ local function git()
     local branch_icon = get_default_highlighted_text("")
     branch_name = get_default_highlighted_text(branch_name)
     local parts = { branch_icon, branch_name, added, changed, removed }
-    return concat(parts)
+    return add_pad(concat(parts, get_default_highlighted_text(" ")))
 end
 
 local function get_diagnostics_icon_and_highlight_group(type)
@@ -132,7 +144,7 @@ local function get_diagnostics_icon_and_highlight_group(type)
     local icon = sign.text
     local sign_highlight_group = sign.texthl
     local sign_fg = get_highlight_group_info(sign_highlight_group).fg
-    return icon, get_highlight_group(sign_highlight_group, sign_fg, default_bg)
+    return icon, get_highlight_group(sign_highlight_group, sign_fg, SELECTED_BG)
 end
 
 local function init_diagnostics()
@@ -165,7 +177,7 @@ local function diagnostics()
     local info_text = ((info_num and info_num > 0) and { (get_highlighted_text(diagnostics_config.info_icon, diagnostics_config.info_highlight_group) .. get_default_highlighted_text(info_num)) } or { "" })[1]
     local hint_text = ((hint_num and hint_num > 0) and { (get_highlighted_text(diagnostics_config.hint_icon, diagnostics_config.hint_highlight_group) .. get_default_highlighted_text(hint_num)) } or { "" })[1]
     local diagnostics_list= { error_text, warn_text, info_text, hint_text }
-    return concat(diagnostics_list)
+    return add_pad(concat(diagnostics_list, get_default_highlighted_text(" ")))
 end
 
 local function percent()
@@ -179,8 +191,10 @@ local function percent()
 end
 
 function M.init()
-    default_highlight_group = get_highlight_group("status_line_text", default_fg, default_bg)
-    pad_highlight_group = get_highlight_group("status_line_pad", default_bg, "NONE")
+    SELECTED_HIGHLIGHT_GROUP = get_highlight_group("selected", SELECTED_FG, SELECTED_BG)
+    SELECTED_PAD_HIGHLIGHT_GROUP = get_highlight_group("selected_pad", SELECTED_BG, "NONE")
+    UNSELECTED_HIGHLIGHT_GROUP = get_highlight_group("unselected", UNSELECTED_FG, UNSELECTED_BG)
+    UNSELECTED_PAD_HIGHLIGHT_GROUP = get_highlight_group("unselected_pad", UNSELECTED_BG, "NONE")
 end
 
 function M.status_line()
