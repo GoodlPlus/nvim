@@ -67,8 +67,8 @@ return  {
                 autocomplete = false,
             },
             mapping = cmp.mapping.preset.insert({
-                ['<C-u>'] = cmp.mapping.scroll_docs(-5), -- Up
-                ['<C-d>'] = cmp.mapping.scroll_docs(5), -- Down
+                ["<C-u>"] = cmp.mapping.scroll_docs(-5), -- Up
+                ["<C-d>"] = cmp.mapping.scroll_docs(5), -- Down
                 ["<Tab>"] = cmp.mapping(function(fallback)
                     if cmp.visible() then
                         cmp.select_next_item()
