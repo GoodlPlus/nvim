@@ -98,10 +98,22 @@ local function file()
     path = vim.fn.fnamemodify(path, ":~")
     local name = vim.fn.fnamemodify(path, ":t")
     local icon, highlight_group = devicons.get_icon(name)
+    if is_active_window() then
+        highlight_group = "selected_" .. highlight_group
+    else
+        highlight_group = "unselected_" .. highlight_group
+    end
     local icon_highlight_group = icon_highlight_groups[highlight_group]
     if icon_highlight_group == nil then
-        local _, color = devicons.get_icon_color(name)
-        icon_highlight_group = get_highlight_group(highlight_group, color, SELECTED_BG)
+        local _, color, bg
+        if is_active_window() then
+            _, color = devicons.get_icon_color(name)
+            bg = SELECTED_BG
+        else
+            _, color = " ", UNSELECTED_FG
+            bg = UNSELECTED_BG
+        end
+        icon_highlight_group = get_highlight_group(highlight_group, color, bg)
         icon_highlight_groups[highlight_group] = icon_highlight_group
     end
     local highlighted_icon = get_highlighted_text(icon, icon_highlight_group)
@@ -149,17 +161,26 @@ end
 
 local function init_diagnostics()
     if diagnostics_config.error_highlight_group == nil then
-        diagnostics_config.error_icon, diagnostics_config.error_highlight_group = get_diagnostics_icon_and_highlight_group("Error")
+        diagnostics_config.selected_error_icon, diagnostics_config.selected_error_highlight_group = get_diagnostics_icon_and_highlight_group("Error")
     end
     if diagnostics_config.warn_highlight_group == nil then
-        diagnostics_config.warn_icon, diagnostics_config.warn_highlight_group = get_diagnostics_icon_and_highlight_group("Warn")
+        diagnostics_config.selected_warn_icon, diagnostics_config.selected_warn_highlight_group = get_diagnostics_icon_and_highlight_group("Warn")
     end
     if diagnostics_config.info_highlight_group == nil then
-        diagnostics_config.info_icon, diagnostics_config.info_highlight_group = get_diagnostics_icon_and_highlight_group("Info")
+        diagnostics_config.selected_info_icon, diagnostics_config.selected_info_highlight_group = get_diagnostics_icon_and_highlight_group("Info")
     end
     if diagnostics_config.hint_highlight_group == nil then
-        diagnostics_config.hint_icon, diagnostics_config.hint_highlight_group = get_diagnostics_icon_and_highlight_group("Hint")
+        diagnostics_config.selected_hint_icon, diagnostics_config.selected_hint_highlight_group = get_diagnostics_icon_and_highlight_group("Hint")
     end
+end
+
+local function get_highlighted_diagnostics_text(num, icon_name, highlight_group_name)
+    if is_active_window() then
+        highlight_group = diagnostics_config[highlight_group_name]
+    else
+        highlight_group = UNSELECTED_HIGHLIGHT_GROUP
+    end
+    return ((num and num > 0) and { (get_highlighted_text(diagnostics_config[icon_name], highlight_group) .. get_default_highlighted_text(num)) } or { "" })[1]
 end
 
 local function diagnostics()
@@ -172,10 +193,13 @@ local function diagnostics()
     local warn_num = #vim.diagnostic.get(bufnr, { severity = vim.diagnostic.severity.WARN })
     local info_num = #vim.diagnostic.get(bufnr, { severity = vim.diagnostic.severity.INFO })
     local hint_num = #vim.diagnostic.get(bufnr, { severity = vim.diagnostic.severity.HINT })
-    local error_text = ((error_num and error_num > 0) and { (get_highlighted_text(diagnostics_config.error_icon, diagnostics_config.error_highlight_group) .. get_default_highlighted_text(error_num)) } or { "" })[1]
-    local warn_text = ((warn_num and warn_num > 0) and { (get_highlighted_text(diagnostics_config.warn_icon, diagnostics_config.warn_highlight_group) .. get_default_highlighted_text(warn_num)) } or { "" })[1]
-    local info_text = ((info_num and info_num > 0) and { (get_highlighted_text(diagnostics_config.info_icon, diagnostics_config.info_highlight_group) .. get_default_highlighted_text(info_num)) } or { "" })[1]
-    local hint_text = ((hint_num and hint_num > 0) and { (get_highlighted_text(diagnostics_config.hint_icon, diagnostics_config.hint_highlight_group) .. get_default_highlighted_text(hint_num)) } or { "" })[1]
+    local error_text = get_highlighted_diagnostics_text(error_num, "selected_error_icon", "selected_error_highlight_group")
+    local warn_text = get_highlighted_diagnostics_text(warn_num, "selected_warn_icon", "selected_warn_highlight_group")
+    local info_text = get_highlighted_diagnostics_text(info_num, "selected_info_icon", "selected_info_highlight_group")
+    local hint_text = get_highlighted_diagnostics_text(hint_num, "selected_hint_icon", "selected_hint_highlight_group")
+    -- local warn_text = ((warn_num and warn_num > 0) and { (get_highlighted_text(diagnostics_config.selected_warn_icon, diagnostics_config.selected_warn_highlight_group) .. get_default_highlighted_text(warn_num)) } or { "" })[1]
+    -- local info_text = ((info_num and info_num > 0) and { (get_highlighted_text(diagnostics_config.selected_info_icon, diagnostics_config.selected_info_highlight_group) .. get_default_highlighted_text(info_num)) } or { "" })[1]
+    -- local hint_text = ((hint_num and hint_num > 0) and { (get_highlighted_text(diagnostics_config.selected_hint_icon, diagnostics_config.selected_hint_highlight_group) .. get_default_highlighted_text(hint_num)) } or { "" })[1]
     local diagnostics_list= { error_text, warn_text, info_text, hint_text }
     return add_pad(concat(diagnostics_list, get_default_highlighted_text(" ")))
 end
@@ -190,11 +214,15 @@ local function percent()
     return add_pad(percent_text)
 end
 
-function M.init()
+local function init_highlight_group()
     SELECTED_HIGHLIGHT_GROUP = get_highlight_group("selected", SELECTED_FG, SELECTED_BG)
     SELECTED_PAD_HIGHLIGHT_GROUP = get_highlight_group("selected_pad", SELECTED_BG, "NONE")
     UNSELECTED_HIGHLIGHT_GROUP = get_highlight_group("unselected", UNSELECTED_FG, UNSELECTED_BG)
     UNSELECTED_PAD_HIGHLIGHT_GROUP = get_highlight_group("unselected_pad", UNSELECTED_BG, "NONE")
+end
+
+function M.init()
+    init_highlight_group()
 end
 
 function M.status_line()

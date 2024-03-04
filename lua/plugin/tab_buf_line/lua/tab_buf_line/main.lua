@@ -19,7 +19,7 @@ local UNSELECTED_PAD_HIGHLIGHT_GROUP
 
 local BASE_COLUMNS = 20
 
-local highlight_groups = {}
+local icon_highlight_groups = {}
 
 local function is_buffer_valid(bufnr)
     return vim.api.nvim_buf_is_valid(bufnr) and vim.bo[bufnr].buflisted
@@ -63,27 +63,31 @@ local function concat(parts, sep)
     end
 end
 
-local function add_fileInfo(file_name, bufnr)
-    local current_buffer = vim.api.nvim_get_current_buf()
+local function get_highlighted_buffer_text(file_name, bufnr)
     local icon, highlight_group = devicons.get_icon(file_name)
-    local is_selected = (current_buffer == bufnr)
-    local bg, path_highlight_group, pad_highlight_group
-    if is_selected then
+    local current_buffer = vim.api.nvim_get_current_buf()
+    local path_highlight_group, pad_highlight_group
+    if current_buffer == bufnr then
         highlight_group = "selected_" .. highlight_group
-        bg = SELECTED_BG
         path_highlight_group = SELECTED_HIGHLIGHT_GROUP
         pad_highlight_group = SELECTED_PAD_HIGHLIGHT_GROUP
     else
         highlight_group = "unselected_" .. highlight_group
-        bg = UNSELECTED_BG
         path_highlight_group = UNSELECTED_HIGHLIGHT_GROUP
         pad_highlight_group = UNSELECTED_PAD_HIGHLIGHT_GROUP
     end
-    local icon_highlight_group = highlight_groups[highlight_group]
+    local icon_highlight_group = icon_highlight_groups[highlight_group]
     if icon_highlight_group == nil then
-        local _, color = devicons.get_icon_color(file_name)
+        local _, color, bg
+        if current_buffer == bufnr then
+            _, color = devicons.get_icon_color(file_name)
+            bg = SELECTED_BG
+        else
+            _, color = " ", UNSELECTED_FG
+            bg = UNSELECTED_BG
+        end
         icon_highlight_group = get_highlight_group(highlight_group, color, bg)
-        highlight_groups[highlight_group] = icon_highlight_group
+        icon_highlight_groups[highlight_group] = icon_highlight_group
     end
     local highlighted_icon = get_highlighted_text(icon, icon_highlight_group)
     local highlighted_path = get_highlighted_text(file_name, path_highlight_group)
@@ -92,10 +96,10 @@ local function add_fileInfo(file_name, bufnr)
     return add_pad(concat(parts, get_highlighted_text(" ", path_highlight_group)), pad_highlight_group)
 end
 
-local function get_highlighted_buffer_text(bufnr)
+local function get_buffer_text(bufnr)
     local path = vim.api.nvim_buf_get_name(bufnr)
     local file_name = ((#path ~= 0) and { vim.fn.fnamemodify(path, ":t") } or { "No Name" })[1]
-    return add_fileInfo(file_name, bufnr)
+    return get_highlighted_buffer_text(file_name, bufnr)
 end
 
 local function buffer_part()
@@ -104,6 +108,7 @@ local function buffer_part()
     local current_buffer = vim.api.nvim_get_current_buf()
     local has_current = false -- have we seen current buffer yet?
 
+    local used_columns = 0
     for _, bufnr in ipairs(vim.t.buffers) do
         if is_buffer_valid(bufnr) then
             if ((#buffers + 1) * BASE_COLUMNS + 1) > available_columns then
@@ -115,7 +120,7 @@ local function buffer_part()
             if bufnr == current_buffer then
                 has_current = true
             end
-            table.insert(buffers, get_highlighted_buffer_text(bufnr))
+            table.insert(buffers, get_buffer_text(bufnr))
         end
     end
 
