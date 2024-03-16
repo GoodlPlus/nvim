@@ -57,7 +57,7 @@ return {
                 -- vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, opts)
                 vim.keymap.set("n", "<leader>r", vim.lsp.buf.rename, keymap_opts)
                 vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, keymap_opts)
-                vim.diagnostic.disable()
+                -- vim.diagnostic.disable()
                 -- vim.lsp.inlay_hint.enable()
                 init_float_window()
             end,

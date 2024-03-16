@@ -47,7 +47,7 @@ return  {
     event = "VeryLazy",
     dependencies = {
         { "hrsh7th/cmp-nvim-lsp", lazy = true, event = "VeryLazy" },
-        -- { "hrsh7th/cmp-buffer", lazy = true, event = "VeryLazy" },
+        { "hrsh7th/cmp-buffer", lazy = true, event = "VeryLazy" },
         { "hrsh7th/cmp-path", lazy = true, event = "VeryLazy" },
         { "hrsh7th/cmp-cmdline", lazy = true, event = "VeryLazy" },
         -- { "saadparwaiz1/cmp_luasnip", lazy = true, event = "VeryLazy" },
@@ -105,7 +105,7 @@ return  {
                 { name = "nvim_lsp" },
                 -- { name = "luasnip" },
             }, {
-                    -- { name = "buffer" },
+                    { name = "buffer" },
                     { name = "path" },
                 }),
             formatting = {
@@ -131,12 +131,12 @@ return  {
             },
         })
 
-        -- cmp.setup.cmdline({ "/", "?" }, {
-        --     mapping = cmp.mapping.preset.cmdline(),
-        --     sources = {
-        --         { name = "buffer" },
-        --     },
-        -- })
+        cmp.setup.cmdline({ "/", "?" }, {
+            mapping = cmp.mapping.preset.cmdline(),
+            sources = {
+                { name = "buffer" },
+            },
+        })
 
         cmp.setup.cmdline(":", {
             mapping = cmp.mapping.preset.cmdline(),

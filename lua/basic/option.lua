@@ -59,7 +59,7 @@ vim.opt.copyindent = true
 vim.opt.splitbelow = true -- Horizontal splits will be below
 vim.opt.splitright = true -- Vertical splits will be to the right
 
-vim.opt.splitkeep = 'screen' -- Reduce scroll during window split
+vim.opt.splitkeep = "screen" -- Reduce scroll during window split
 
 vim.opt.scrolloff = 5
 vim.opt.smoothscroll = true

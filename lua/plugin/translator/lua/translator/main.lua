@@ -130,7 +130,7 @@ end
 
 local function translate(text)
     local data = { text = text, target_language = "zh" }
-    data = vim.json.encode(data)
+    local json_data = vim.json.encode(data)
     vim.system({
         "curl",
         "--location",
@@ -138,7 +138,7 @@ local function translate(text)
         "--header",
         "Content-Type: application/json",
         "--data",
-        data,
+        json_data,
     },
         { timeout = 10000 },
         process_ouput)
