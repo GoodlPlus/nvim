@@ -42,6 +42,7 @@ vim.api.nvim_create_autocmd(
 -- Remove trailing spaces and lines
 --------------------------------------------------------------------------------
 local function remove_trailing_spaces_lines()
+    local saved_cursor = vim.fn.getpos(".")
     vim.cmd([[silent %s/\s\+$//e]])
     local first_line_num = vim.fn.line("^")
     local first_non_blank_line_num = vim.fn.nextnonblank(first_line_num)
@@ -53,6 +54,7 @@ local function remove_trailing_spaces_lines()
     if last_non_blank_line_num + 1 <= last_line_num then
         vim.fn.deletebufline("%", last_non_blank_line_num + 1, last_line_num)
     end
+    vim.fn.setpos(".", saved_cursor)
 end
 
 vim.api.nvim_create_autocmd(
@@ -123,3 +125,23 @@ vim.api.nvim_create_autocmd("FileType", {
         vim.keymap.set("n", "gd", "<c-]>")
     end,
 })
+
+vim.api.nvim_create_autocmd('BufRead', {
+    callback = function(opts)
+        vim.api.nvim_create_autocmd('BufWinEnter', {
+            once = true,
+            buffer = opts.buf,
+            callback = function()
+                local ft = vim.bo[opts.buf].filetype
+                local last_known_line = vim.api.nvim_buf_get_mark(opts.buf, '"')[1]
+                if
+                    not (ft:match('commit') and ft:match('rebase'))
+                    and last_known_line > 1
+                    and last_known_line <= vim.api.nvim_buf_line_count(opts.buf)
+                    then
+                        vim.api.nvim_feedkeys([[g`"]], 'nx', false)
+                    end
+                end,
+            })
+        end,
+    })

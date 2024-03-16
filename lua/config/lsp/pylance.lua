@@ -20,8 +20,7 @@ return {
                     'pyrightconfig.json',
                     '.git',
                 })),
-                -- cmd = { VIM_DATA_PATH .. "/mason/bin/pylance", "--stdio" },
-                cmd = { "delance-langserver", "--stdio" },
+                cmd = { VIM_DATA_PATH .. "/mason/bin/pylance", "--stdio" },
                 single_file_support = true,
                 capabilities = capabilities,
                 on_init = function(client)
