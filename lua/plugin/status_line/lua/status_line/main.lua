@@ -208,9 +208,16 @@ local function percent()
     local bufnr = get_status_line_bufnr()
     local current_pos = vim.fn.getcurpos(vim.g.statusline_winid)
     local line_count = vim.api.nvim_buf_line_count(bufnr)
-    local percent = math.floor((current_pos[2] - 1) * 100 / line_count)
-    local percent_text = string.format("%2d", percent)
-    percent_text = get_default_highlighted_text("  " .. percent_text .. "%% ")
+    local percent_text
+    if current_pos[2] == 1 then
+        percent_text = "TOP "
+    elseif current_pos[2] == line_count then
+        percent_text = "BOT "
+    else
+        local line_percent = math.floor((current_pos[2] - 1) * 100 / line_count)
+        percent_text = string.format("%2d", line_percent) .. "%% "
+    end
+    percent_text = get_default_highlighted_text("  " .. percent_text)
     return add_pad(percent_text)
 end
 
