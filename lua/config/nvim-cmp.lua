@@ -113,7 +113,7 @@ return  {
                 format = function(_, item)
                     local icon = kind_to_icon[item.kind] or ""
                     item.kind = string.format("%s %s", icon, item.kind or "")
-                    item.abbr = string.sub(item.abbr, 1, 50)
+                    item.abbr = string.sub(item.abbr, 1, 30)
                     return item
                 end,
             },
