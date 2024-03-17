@@ -79,14 +79,14 @@ vim.api.nvim_create_autocmd({ "VimResized" }, {
 
 
 --------------------------------------------------------------------------------
--- wrap and check for spell in text filetypes
+-- check for spell in text filetypes
 --------------------------------------------------------------------------------
 vim.api.nvim_create_autocmd("FileType", {
-    group = utils.augroup("wrap_spell"),
+    group = utils.augroup("spell_check"),
     pattern = { "gitcommit", "markdown" },
     callback = function()
-        vim.opt_local.wrap = true
         vim.opt_local.spell = true
+        vim.opt_local.spelllang = "en_us,cjk"
     end,
 })
 
@@ -122,10 +122,13 @@ vim.api.nvim_create_autocmd("FileType", {
     group = utils.augroup("go_to_def_help"),
     pattern = { "help" },
     callback = function()
-        vim.keymap.set("n", "gd", "<c-]>")
+        vim.keymap.set("n", "gd", "<c-]>", { buffer = 0 })
     end,
 })
 
+--------------------------------------------------------------------------------
+-- restore cursor position
+--------------------------------------------------------------------------------
 vim.api.nvim_create_autocmd('BufRead', {
     callback = function(opts)
         vim.api.nvim_create_autocmd('BufWinEnter', {
