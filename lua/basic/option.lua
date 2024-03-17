@@ -5,6 +5,8 @@ if vim.fn.has('nvim-0.10') == 0 then
 end
 
 vim.env.LANG = "en_US.UTF-8"
+vim.opt.spell = true
+vim.opt.spelllang = "en_us,cjk"
 
 vim.g.mapleader = " "
 
