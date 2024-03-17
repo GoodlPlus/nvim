@@ -49,7 +49,7 @@ return {
                             useLibraryCodeForTypes = true,
                             indexing = true,
                             packageIndexDepths = {
-                                { name = "torch", depth = 3, includeAllSymbols = false },
+                                -- { name = "torch", depth = 3, includeAllSymbols = false },
                                 -- { name = "sklearn", depth = 2, includeAllSymbols = true },
                                 -- { name = "matplotlib", depth = 3, includeAllSymbols = false },
                             },
@@ -57,10 +57,10 @@ return {
                             autoImportUserSymbols = false,
                             completeFunctionParens = false,
                             inlayHints = {
-                                variableTypes = true,
-                                functionReturnTypes = true,
-                                callArgumentNames = true,
-                                pytestParameters = true,
+                                variableTypes = false,
+                                functionReturnTypes = false,
+                                callArgumentNames = false,
+                                pytestParameters = false,
                             },
                         },
                     },
