@@ -1,3 +1,5 @@
+vim.cmd[[syntax off]]
+
 if vim.fn.has('nvim-0.10') == 0 then
     vim.opt.termguicolors = true -- Enable gui colors
 end

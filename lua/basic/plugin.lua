@@ -1,4 +1,5 @@
 local lazy_path = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+
 if not vim.loop.fs_stat(lazy_path) then
     vim.fn.system({
         "git",
@@ -9,7 +10,9 @@ if not vim.loop.fs_stat(lazy_path) then
         lazy_path,
     })
 end
+
 vim.opt.rtp:prepend(lazy_path)
+
 require("lazy").setup({
     defaults = {
         lazy = true, -- every plugin is lazy-loaded by default
@@ -70,4 +73,5 @@ require("lazy").setup({
         },
     },
 })
+
 require("lazy.view.config").keys.close = "<Esc>"
