@@ -134,7 +134,8 @@ local function translate(text)
     vim.system({
         "curl",
         "--location",
-        "https://gob6qv7s.fn.bytedance.net/DeepL",
+        -- "https://gob6qv7s.fn.bytedance.net/DeepL",
+        "101.201.225.252:248/DeepL",
         "--header",
         "Content-Type: application/json",
         "--data",
