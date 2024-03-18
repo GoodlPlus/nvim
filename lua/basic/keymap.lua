@@ -96,6 +96,7 @@ vim.keymap.set("x", "g?", "<Esc>?\\%V\\v", { noremap = true })
 -- Copy/paste with system clipboard
 vim.keymap.set({"n", "x"}, "gy", '"+y', { noremap = true, desc = "Copy to system clipboard" })
 vim.keymap.set("n", "gp", '"+p', { noremap = true, desc = "Paste from system clipboard" })
+vim.keymap.set("n", "gP", '"+P', { noremap = true, desc = "Paste from system clipboard" })
 -- - Paste in Visual with `P` to not copy selected text (`:h v_P`)
 vim.keymap.set("x", "gp", '"+P', { noremap = true, desc = "Paste from system clipboard" })
 
