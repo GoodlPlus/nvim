@@ -10,6 +10,7 @@ return {
         capabilities.workspace.didChangeWatchedFiles.dynamicRegistration = false
         configs.pylance = {
             default_config = {
+                cmd = { VIM_DATA_PATH .. "/mason/bin/pylance", "--stdio" },
                 filetypes = { "python" },
                 root_dir = util.root_pattern(unpack({
                     'pyproject.toml',
@@ -20,7 +21,6 @@ return {
                     'pyrightconfig.json',
                     '.git',
                 })),
-                cmd = { VIM_DATA_PATH .. "/mason/bin/pylance", "--stdio" },
                 single_file_support = true,
                 capabilities = capabilities,
                 on_init = function(client)
@@ -40,21 +40,14 @@ return {
                     or "python"
                 end,
                 settings = {
-                    editor = { formatOnType = false },
                     python = {
                         analysis = {
-                            typeCheckingMode = "off",
+                            typeCheckingMode = "basic",
                             diagnosticMode = "openFilesOnly",
                             autoSearchPaths = true,
                             useLibraryCodeForTypes = true,
                             indexing = true,
-                            packageIndexDepths = {
-                                -- { name = "torch", depth = 3, includeAllSymbols = false },
-                                -- { name = "sklearn", depth = 2, includeAllSymbols = true },
-                                -- { name = "matplotlib", depth = 3, includeAllSymbols = false },
-                            },
                             autoImportCompletions = false,
-                            autoImportUserSymbols = false,
                             completeFunctionParens = false,
                             inlayHints = {
                                 variableTypes = false,

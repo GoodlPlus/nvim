@@ -105,3 +105,9 @@ vim.keymap.set('n', 'gV', '"`[" . strpart(getregtype(), 0, 1) . "`]"', { expr = 
 
 vim.keymap.set("n", "[q", vim.cmd.cprev, { desc = "Previous quickfix" })
 vim.keymap.set("n", "]q", vim.cmd.cnext, { desc = "Next quickfix" })
+
+--------------------------------------------------------------------------------
+-- emacs keymap
+--------------------------------------------------------------------------------
+vim.keymap.set("i", "<C-a>", "<ESC>^i", { desc = "Move Beginning of line" })
+vim.keymap.set("i", "<C-e>", "<End>", { desc = "Move End of line" })

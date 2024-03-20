@@ -1,0 +1,23 @@
+return {
+    -- "neovim/nvim-lspconfig",
+    -- lazy = true,
+    -- event = "VeryLazy",
+    -- ft = "python",
+    -- opts = {
+    --     basedpyright = {
+    --         cmd = { "basedpyright-langserver", "--stdio" },
+    --         settings = {
+    --             editor = { formatOnType = false },
+    --             basedpyright = {
+    --                 analysis = {
+    --                     autoImportCompletions = true,
+    --                     autoSearchPaths = true,
+    --                     diagnosticMode = "openFilesOnly",
+    --                     typeCheckingMode = "basic",
+    --                     useLibraryCodeForTypes = true,
+    --                 },
+    --             },
+    --         },
+    --     }
+    -- }
+}

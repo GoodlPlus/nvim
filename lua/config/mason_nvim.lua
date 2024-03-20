@@ -2,7 +2,7 @@ return {
     "williamboman/mason.nvim",
     lazy = true,
     event = "VeryLazy",
-    cmd = "Mason",
+    cmd = { "Mason", "MasonInstall", "MasonInstallAll", "MasonUpdate" },
     build = ":MasonUpdate",
     opts = {
         ui = {
@@ -18,4 +18,14 @@ return {
         ensure_installed = { "pylance", "clangd", "lua-language-server" },
         registries = { "github:fecet/mason-registry" },
     },
+    config = function(_, opts)
+        require("mason").setup(opts)
+
+        -- custom nvchad cmd to install all mason binaries listed
+        vim.api.nvim_create_user_command("MasonInstallAll", function()
+            if opts.ensure_installed and #opts.ensure_installed > 0 then
+                vim.cmd("MasonInstall " .. table.concat(opts.ensure_installed, " "))
+            end
+        end, {})
+    end,
 }
