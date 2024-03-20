@@ -14,7 +14,7 @@ return {
         require("nvim-treesitter.query_predicates")
     end,
     opts = {
-        ensure_installed = { "lua", "vim", "vimdoc", "thrift" },
+        ensure_installed = { "lua", "vim", "vimdoc", "markdown", "thrift" },
         highlight = {
             enable = true,
             additional_vim_regex_highlighting = false,
