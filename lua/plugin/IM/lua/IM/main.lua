@@ -37,6 +37,10 @@ function M.save_IM()
 end
 
 function M.init()
+    local status_code = vim.fn.executable(SELECTOR)
+    if status_code ~= 1 then
+        return
+    end
     local IM_group_id = utils.augroup("IM")
     vim.api.nvim_create_autocmd(
         { "InsertLeave" },
