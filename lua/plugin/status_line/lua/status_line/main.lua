@@ -118,8 +118,9 @@ local function file()
     end
     local highlighted_icon = get_highlighted_text(icon, icon_highlight_group)
     local highlighted_path = get_default_highlighted_text(path)
+    local readonly = (vim.bo[bufnr].readonly == true and { get_default_highlighted_text("") } or { "" })[1]
     local modified = (vim.bo[bufnr].modified == true and { get_default_highlighted_text("") } or { "" })[1]
-    local parts = { highlighted_icon, highlighted_path, modified }
+    local parts = { highlighted_icon, highlighted_path, readonly, modified }
     return add_pad(concat(parts, get_default_highlighted_text(" ")))
 end
 
