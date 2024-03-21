@@ -125,30 +125,13 @@ local function file()
 end
 
 local function git()
-    local branch_name, added, changed, removed = "", "", "", ""
-    local bufnr = get_status_line_bufnr()
-    if not vim.b[bufnr].gitsigns_head or vim.b[bufnr].gitsigns_git_status then
-        local path = vim.api.nvim_buf_get_name(bufnr)
-        local root = vim.fn.fnamemodify(path, ":h")
-        local branch_info = vim.system({ "git", "symbolic-ref", "--short", "HEAD" }, { cwd = root, stderr = false }):wait()
-        local code = branch_info.code
-        if code == 0 then
-            branch_name = branch_info.stdout
-            branch_name = utils.strip(branch_name)
-        end
-    else
-        local git_status = vim.b[bufnr].gitsigns_status_dict
-        added = ((git_status.added and git_status.added ~= 0) and { get_default_highlighted_text(" " .. git_status.added) } or { "" })[1]
-        changed = ((git_status.changed and git_status.changed ~= 0) and { get_default_highlighted_text(" " .. git_status.changed) } or { "" })[1]
-        removed = ((git_status.removed and git_status.removed ~= 0) and { get_default_highlighted_text(" " .. git_status.removed) } or { "" })[1]
-        branch_name = git_status.head
-    end
-    if branch_name == "" or branch_name == nil then
+    local git_branch = vim.b.git_branch
+    if git_branch == "" or git_branch == nil then
         return nil
     end
     local branch_icon = get_default_highlighted_text("")
-    branch_name = get_default_highlighted_text(branch_name)
-    local parts = { branch_icon, branch_name, added, changed, removed }
+    git_branch = get_default_highlighted_text(git_branch)
+    local parts = { branch_icon, git_branch }
     return add_pad(concat(parts, get_default_highlighted_text(" ")))
 end
 
@@ -176,6 +159,7 @@ local function init_diagnostics()
 end
 
 local function get_highlighted_diagnostics_text(num, icon_name, highlight_group_name)
+    local highlight_group
     if is_active_window() then
         highlight_group = diagnostics_config[highlight_group_name]
     else
@@ -229,8 +213,21 @@ local function init_highlight_group()
     UNSELECTED_PAD_HIGHLIGHT_GROUP = get_highlight_group("unselected_pad", UNSELECTED_BG, "NONE")
 end
 
+local function init_git_branch()
+    vim.api.nvim_create_autocmd({"BufEnter", "FocusGained"}, {
+        group = utils.augroup("git_branch"),
+        callback = function(args)
+            local root = vim.fn.fnamemodify(args.file, ":h")
+            local output = vim.system({ "git", "branch", "--show-current" }, { cwd = root, stderr = false, timeout = 10000 }):wait()
+            local git_branch = utils.strip(output.stdout)
+            vim.b.git_branch = git_branch
+        end
+    })
+end
+
 function M.init()
     init_highlight_group()
+    init_git_branch()
 end
 
 function M.status_line()

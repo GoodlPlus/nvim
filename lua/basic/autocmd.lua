@@ -106,11 +106,11 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
 --------------------------------------------------------------------------------
 vim.api.nvim_create_autocmd({ "BufWritePre" }, {
     group = utils.augroup("auto_create_dir"),
-    callback = function(event)
-        if event.match:match("^%w%w+://") then
+    callback = function(args)
+        if args.match:match("^%w%w+://") then
             return
         end
-        local file = vim.loop.fs_realpath(event.match) or event.match
+        local file = vim.loop.fs_realpath(args.match) or args.match
         vim.fn.mkdir(vim.fn.fnamemodify(file, ":p:h"), "p")
     end,
 })
@@ -130,17 +130,17 @@ vim.api.nvim_create_autocmd("FileType", {
 -- restore cursor position
 --------------------------------------------------------------------------------
 vim.api.nvim_create_autocmd('BufRead', {
-    callback = function(opts)
+    callback = function(args)
         vim.api.nvim_create_autocmd('BufWinEnter', {
             once = true,
-            buffer = opts.buf,
+            buffer = args.buf,
             callback = function()
-                local ft = vim.bo[opts.buf].filetype
-                local last_known_line = vim.api.nvim_buf_get_mark(opts.buf, '"')[1]
+                local ft = vim.bo[args.buf].filetype
+                local last_known_line = vim.api.nvim_buf_get_mark(args.buf, '"')[1]
                 if
                     not (ft:match('commit') and ft:match('rebase'))
                     and last_known_line > 1
-                    and last_known_line <= vim.api.nvim_buf_line_count(opts.buf)
+                    and last_known_line <= vim.api.nvim_buf_line_count(args.buf)
                     then
                         vim.api.nvim_feedkeys([[g`"]], 'nx', false)
                     end

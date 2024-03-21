@@ -39,10 +39,10 @@ return {
         -- after the language server attaches to the current buffer
         vim.api.nvim_create_autocmd("LspAttach", {
             group = vim.api.nvim_create_augroup("UserLspConfig", {}),
-            callback = function(ev)
+            callback = function(args)
                 -- Buffer local mappings.
                 -- See `:help vim.lsp.*` for documentation on any of the below functions
-                local keymap_opts = { buffer = ev.buf }
+                local keymap_opts = { buffer = args.buf }
                 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
                 vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, keymap_opts)
                 vim.keymap.set("n", "]d", vim.diagnostic.goto_next, keymap_opts)
