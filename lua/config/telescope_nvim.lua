@@ -43,7 +43,14 @@ return {
     dependencies = {
         { "nvim-lua/plenary.nvim", lazy = true, event = "VeryLazy" },
         { "nvim-tree/nvim-web-devicons", lazy = true, event = "VeryLazy" },
-        { "nvim-telescope/telescope-fzf-native.nvim", build = "make", lazy = true, event = "VeryLazy" },
+        { "nvim-telescope/telescope-fzf-native.nvim",
+            build = "make",
+            lazy = true,
+            event = "VeryLazy",
+            cond = function()
+                return vim.fn.executable("make") == 1
+            end,
+        },
         { "debugloop/telescope-undo.nvim", lazy = true, event = "VeryLazy" },
         { "nvim-telescope/telescope-ui-select.nvim", lazy = true, event = "VeryLazy" },
     },

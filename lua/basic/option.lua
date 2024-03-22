@@ -6,6 +6,7 @@ vim.env.LANG = "en_US.UTF-8"
 
 vim.g.mapleader = " "
 
+-- Case-insensitive searching UNLESS \C or one or more capital letters in the search term
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
 
@@ -18,7 +19,11 @@ vim.opt.fileformats = { "unix", "dos", "mac" }
 vim.opt.ruler = false
 vim.opt.number = true
 vim.opt.relativenumber = true
+
+-- Keep signcolumn on by default
 vim.opt.signcolumn = "yes"
+
+-- Show which line your cursor is on
 vim.opt.cursorline = true
 vim.opt.cursorlineopt = "number"
 vim.opt.fillchars = { eob = " ", fold = " " }
@@ -56,8 +61,9 @@ end
 -- vim.opt.breakindent = true
 vim.opt.copyindent = true
 
-vim.opt.splitbelow = true -- Horizontal splits will be below
+-- Configure how new splits should be opened
 vim.opt.splitright = true -- Vertical splits will be to the right
+vim.opt.splitbelow = true -- Horizontal splits will be below
 
 vim.opt.splitkeep = "screen" -- Reduce scroll during window split
 
@@ -78,6 +84,9 @@ vim.opt.shiftround = true
 -- See doc (:help 'whichwrap')
 vim.opt.whichwrap = "<,>,[,]"
 
+-- Sets how neovim will display certain whitespace characters in the editor.
+--  See `:help 'list'`
+--  and `:help 'listchars'`
 vim.opt.list = true
 vim.opt.listchars = { leadmultispace = "╏   " }
 
@@ -100,6 +109,7 @@ vim.opt.completeopt = { menu = true, menuone = true, popup = true }
 
 vim.opt.shortmess = { a = true, s = true, t = true, c = true, C = true, F = true }
 
+-- Decrease update time
 vim.opt.updatetime = 500
 
 -- Always report number of lines changed
@@ -107,10 +117,12 @@ vim.opt.report = 0
 
 -- viminfo
 
--- Set timeout (default on)
+-- Decrease mapped sequence wait time
 vim.opt.timeoutlen = 500
 
 vim.opt.directory = ".,~/tmp,/var/tmp,/tmp"
+
+-- Save undo history
 vim.opt.undofile = true
 
 vim.cmd([[
