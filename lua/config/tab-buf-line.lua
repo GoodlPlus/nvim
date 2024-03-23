@@ -1,5 +1,5 @@
 return {
-    dir = VIM_CONFIG_PATH .. "/lua/plugin/tab_buf_line",
+    dir = VIM_CONFIG_PATH .. "/lua/plugin/tab-buf-line",
     lazy = true,
     event = { "BufReadPre", "BufNewFile" },
     dependencies = {

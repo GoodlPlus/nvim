@@ -105,7 +105,9 @@ vim.opt.showtabline = 2
 vim.opt.pumheight = 10
 
 vim.opt.complete:append({ kspell = true })
-vim.opt.completeopt = { menu = true, menuone = true, popup = true }
+vim.opt.completeopt = "menu,menuone,preview,noinsert,noselect,popup"
+
+vim.opt.formatoptions:remove({ "r", "o" })
 
 vim.opt.shortmess = { a = true, s = true, t = true, c = true, C = true, F = true }
 

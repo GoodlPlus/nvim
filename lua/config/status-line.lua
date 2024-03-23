@@ -1,5 +1,5 @@
 return {
-    dir = VIM_CONFIG_PATH .. "/lua/plugin/status_line",
+    dir = VIM_CONFIG_PATH .. "/lua/plugin/status-line",
     lazy = true,
     event = { "BufReadPre", "BufNewFile" },
     dependencies = {

@@ -98,6 +98,8 @@ return {
                 -- or a suggestion from your LSP for this to activate.
                 vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, keymap_opts)
 
+                vim.diagnostic.config({ virtual_text = false })
+
                 -- vim.diagnostic.disable()
                 -- vim.lsp.inlay_hint.enable()
                 init_cursor_highlight(args)

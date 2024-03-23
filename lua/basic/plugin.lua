@@ -73,5 +73,3 @@ require("lazy").setup({
         },
     },
 })
-
-require("lazy.view.config").keys.close = "<Esc>"

@@ -1,0 +1,9 @@
+vim.o.guifont = "SauceCodePro Nerd Font:h15"
+vim.g.neovide_window_blurred = true
+vim.g.neovide_transparency = 0.8
+vim.g.neovide_scroll_animation_length = 0.3
+vim.g.neovide_hide_mouse_when_typing = true
+vim.g.neovide_refresh_rate = 120
+vim.g.neovide_refresh_rate_idle = 5
+vim.g.neovide_profiler = true
+vim.g.neovide_input_macos_alt_is_meta = true
