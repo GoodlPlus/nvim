@@ -183,7 +183,24 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
 -- remove auto comment in next line
 --------------------------------------------------------------------------------
 vim.api.nvim_create_autocmd("FileType", {
+    group = utils.augroup("remove_auto_comment"),
     callback = function()
         vim.opt_local.formatoptions:remove({ "r", "o" })
+    end,
+})
+
+--------------------------------------------------------------------------------
+-- modify indent and shiftwidth when filetype is yaml
+--------------------------------------------------------------------------------
+vim.api.nvim_create_autocmd("FileType", {
+    group = utils.augroup("modify_yaml_indent"),
+    pattern = {
+        "yaml",
+    },
+    callback = function()
+        vim.opt_local.shiftwidth = 2
+        vim.opt_local.tabstop = 2
+        vim.opt_local.softtabstop = 2
+        vim.opt_local.listchars = { leadmultispace = "╏ " }
     end,
 })
