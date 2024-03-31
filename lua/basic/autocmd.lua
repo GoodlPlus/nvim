@@ -110,17 +110,6 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
 })
 
 --------------------------------------------------------------------------------
--- gd in vim help
---------------------------------------------------------------------------------
-vim.api.nvim_create_autocmd({ "FileType" }, {
-    group = utils.augroup("go_to_def_help"),
-    pattern = { "help" },
-    callback = function()
-        vim.keymap.set("n", "gd", "<c-]>", { buffer = 0 })
-    end,
-})
-
---------------------------------------------------------------------------------
 -- restore cursor position
 --------------------------------------------------------------------------------
 -- vim.api.nvim_create_autocmd('BufRead', {
@@ -186,21 +175,5 @@ vim.api.nvim_create_autocmd("FileType", {
     group = utils.augroup("remove_auto_comment"),
     callback = function()
         vim.opt_local.formatoptions:remove({ "r", "o" })
-    end,
-})
-
---------------------------------------------------------------------------------
--- modify indent and shiftwidth when filetype is yaml
---------------------------------------------------------------------------------
-vim.api.nvim_create_autocmd("FileType", {
-    group = utils.augroup("modify_yaml_indent"),
-    pattern = {
-        "yaml",
-    },
-    callback = function()
-        vim.opt_local.shiftwidth = 2
-        vim.opt_local.tabstop = 2
-        vim.opt_local.softtabstop = 2
-        vim.opt_local.listchars = { leadmultispace = "╏ " }
     end,
 })
