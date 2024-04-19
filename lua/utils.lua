@@ -18,7 +18,7 @@ end
 
 function M.get_selected_text(mode)
     if mode == "n" then
-        return vim.fn.expand("<cword>")
+        return { vim.fn.expand("<cword>") }
     elseif vim.list_contains({ "v", "V", "" }, mode) then
         return M.get_visual_selected_text()
     else
@@ -29,9 +29,7 @@ end
 function M.get_visual_selected_text()
     local start_pos = vim.fn.getpos("'<")
     local end_pos = vim.fn.getpos("'>")
-    local max_col = vim.v.maxcol
-    local lines = vim.api.nvim_buf_get_text(0, start_pos[2] - 1, start_pos[3] - 1, end_pos[2] - 1, (end_pos[3] == max_col and { -1 } or { end_pos[3] })[1], {})
-    local text = table.concat(lines, "\n")
+    local text = vim.fn.getregion(start_pos, end_pos)
     return text
 end
 

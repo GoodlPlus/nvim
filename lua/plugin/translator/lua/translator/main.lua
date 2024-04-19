@@ -7,7 +7,7 @@ local function filter_text(text)
     local comment_prefix = utils.split(comment_string, " ")[1]
     local escape_comment_prefix = utils.escape(comment_prefix)
 
-    local lines = utils.split(text, "\n")
+    local lines = text
     local filtered_lines = {}
     for _, line in ipairs(lines) do
         if comment_prefix ~= nil and comment_prefix ~= "" then

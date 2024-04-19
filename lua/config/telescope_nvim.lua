@@ -14,7 +14,7 @@ local function create_command_of_fuzzy_find(command, command_function)
 end
 
 local function current_buffer_fuzzy_find(mode, opts)
-    local text = utils.get_selected_text(mode)
+    local text = table.concat(utils.get_selected_text(mode), "\n")
     require('telescope.builtin').current_buffer_fuzzy_find({
         default_text = text,
         initial_mode = "normal",
@@ -22,7 +22,7 @@ local function current_buffer_fuzzy_find(mode, opts)
 end
 
 local function live_grep(mode, opts)
-    local text = utils.get_selected_text(mode)
+    local text = table.concat(utils.get_selected_text(mode), "\n")
     require('telescope.builtin').live_grep({
         default_text = text,
         initial_mode = "normal",
